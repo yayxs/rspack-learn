@@ -16,7 +16,7 @@
 
 1. [about webpack & webpack-cli](#demo-01--about-webpack--webpack-cli-source-code)
 
-## Demo 01 : about webpack & webpack-cli ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo01))
+## Demo 01 : about webpack & webpack-cli ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo01))  [:top:](#table-of-contents)
 
 ```sh
 ls
@@ -137,10 +137,7 @@ if (!cli.installed) {
 			" "
 		)} ${cli.package}".`
 	);
-
-  ……………………………………
-  
-  ……………………………………
+// and so on
 ```
 
 成功之后的打包结果
