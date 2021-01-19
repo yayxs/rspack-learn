@@ -168,3 +168,82 @@ webpack 5.14.0 compiled with 1 warning in 209 ms
     <script src="./dist/main.js"></script>
   </body>
 ```
+
+---
+
+## Demo 02 : webpack.config.js & handle css module
+
+
+
+默认是`index.js` 指定入口, `api/cli` 通过命令行的方式
+
+```zsh
+npx webpack --entry ./src/main.js --output-path ./build
+```
+
+以上的方式也是可以的，但是不太方便
+
+`webpack.config.js`
+
+```js
+module.exports ={
+	entry:'./src/main.js',
+	output:{
+		filename:'出口的文件名.js',
+		path:'' // 绝对路径
+	}
+}
+```
+
+**ERROR**
+
+```shell
+Invalid configuration object. Webpack has been initialized using a configuration object that does not match the API schema.
+ - configuration.output.path: The provided value "" is not an absolute path!   -> The output directory as **absolute path** (required).
+```
+提供配置文件的路径 `new.config.js`
+
+```json
+{
+	"build":"webpack --config new.config.js"
+}
+```
+
+没有使用过的文件是不会被打包进去的,接着我们处理`CSS` 文件
+
+**ERROR**
+
+```shell
+ERROR in ./src/styles/index.css 1:4
+Module parse failed: Unexpected token (1:4)
+You may need an appropriate loader to handle this file type, currently no loaders are configured to process 
+this file. See https://webpack.js.org/concepts#loaders
+```
+我们需要`css-loader` 的能力来处理css 文件
+
+
+## Loaders
+
+### css-loader
+其主要的作用就是当我们在文件中引入`css` 文件中的时候
+ - 内联的方式
+ - cli的方式
+ - 配置的方式
+```js
+// webpack.config.js
+module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: [
+          {
+            loader: "css-loader",
+            options: {
+        
+            },
+          },
+        ],
+      },
+    ],
+  },
+```
