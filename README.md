@@ -16,7 +16,7 @@
 
 1. [about webpack & webpack-cli](#demo-01--about-webpack--webpack-cli-source-code)
 
-## Demo 01 : about webpack & webpack-cli ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo01))  [:top:](#table-of-contents)
+## Demo 01 : about webpack & webpack-cli ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo01)) [:top:](#table-of-contents)
 
 ```sh
 ls
@@ -62,13 +62,14 @@ In `index.html` We can load
 will `error`
 
 ```js
-// xx Uncaught SyntaxError: Cannot use import statement outside a module 
+// xx Uncaught SyntaxError: Cannot use import statement outside a module
 ```
-and 
+
+and
 
 ```js
 // xx index.js:1 Uncaught ReferenceError: require is not defined
-    // at index.js:1
+// at index.js:1
 ```
 
 这时候借助 `webpack` 和 `webpack-cli` 来打包不同的`模块化语法` 可以参考[https://javascript.info/modules](https://javascript.info/modules)
@@ -76,6 +77,7 @@ and
 ```sh
 cd demo01 && yarn add webpack -D
 ```
+
 will `info`
 
 ```shell
@@ -87,7 +89,7 @@ We will use "yarn" to install the CLI via "yarn add -D webpack-cli".
 Do you want to install 'webpack-cli' (yes/no):
 ```
 
-源码对应的位置 
+源码对应的位置
 
 ```js
 
@@ -157,23 +159,38 @@ webpack 5.14.0 compiled with 1 warning in 209 ms
 
 ```js
 // root/dist/main.js
-(()=>{var r={35:r=>{r.exports={add:(r,t)=>r+t}}},t={};function e(s){if(t[s])return t[s].exports;var o=t[s]={exports:{}};return r[s](o,o.exports,e),o.exports}(()=>{"use strict";const{add:r}=e(35);r(1,2)})()})();
+(() => {
+  var r = {
+      35: (r) => {
+        r.exports = { add: (r, t) => r + t };
+      },
+    },
+    t = {};
+  function e(s) {
+    if (t[s]) return t[s].exports;
+    var o = (t[s] = { exports: {} });
+    return r[s](o, o.exports, e), o.exports;
+  }
+  (() => {
+    "use strict";
+    const { add: r } = e(35);
+    r(1, 2);
+  })();
+})();
 ```
 
-替换`index.html` 中的脚本 
+替换`index.html` 中的脚本
 
 ```html
 <body>
-    <!-- <script src="./src/index.js" type="module"></script> -->
-    <script src="./dist/main.js"></script>
-  </body>
+  <!-- <script src="./src/index.js" type="module"></script> -->
+  <script src="./dist/main.js"></script>
+</body>
 ```
 
 ---
 
 ## Demo 02 : webpack.config.js & handle css module
-
-
 
 默认是`index.js` 指定入口, `api/cli` 通过命令行的方式
 
@@ -186,13 +203,13 @@ npx webpack --entry ./src/main.js --output-path ./build
 `webpack.config.js`
 
 ```js
-module.exports ={
-	entry:'./src/main.js',
-	output:{
-		filename:'出口的文件名.js',
-		path:'' // 绝对路径
-	}
-}
+module.exports = {
+  entry: "./src/main.js",
+  output: {
+    filename: "出口的文件名.js",
+    path: "", // 绝对路径
+  },
+};
 ```
 
 **ERROR**
@@ -201,11 +218,12 @@ module.exports ={
 Invalid configuration object. Webpack has been initialized using a configuration object that does not match the API schema.
  - configuration.output.path: The provided value "" is not an absolute path!   -> The output directory as **absolute path** (required).
 ```
+
 提供配置文件的路径 `new.config.js`
 
 ```json
 {
-	"build":"webpack --config new.config.js"
+  "build": "webpack --config new.config.js"
 }
 ```
 
@@ -216,19 +234,54 @@ Invalid configuration object. Webpack has been initialized using a configuration
 ```shell
 ERROR in ./src/styles/index.css 1:4
 Module parse failed: Unexpected token (1:4)
-You may need an appropriate loader to handle this file type, currently no loaders are configured to process 
+You may need an appropriate loader to handle this file type, currently no loaders are configured to process
 this file. See https://webpack.js.org/concepts#loaders
 ```
-我们需要`css-loader` 的能力来处理css 文件
 
+我们需要`css-loader` 的能力来处理 css 文件。这样可以正常引入`css`文件 **但是并没有应用到页面文档中** 还需要`style-loader` 样式才会生效
+
+```shell
+yarn add css-loader style-loader -D 
+```
+
+通常情况下我们是使用`预处理器` 譬如`sass(scss)` ,预处理文件
+
+```scss
+div{
+	span{
+
+	}
+}
+```
+
+处理这种文件需要对应的编译 
+
+```sh
+yarn add sass -D
+yarn add sass-loader -D
+
+```
+
+```shell
+ERROR in ./src/styles/index.scss 1:3
+Module parse failed: Unexpected token (1:3)
+You may need an appropriate loader to handle this file type, currently no loaders are configured to process 
+this file. See https://webpack.js.org/concepts#loaders> div{
+|     span{
+|
+ @ ./src/main.js 2:0-28
+```
 
 ## Loaders
 
 ### css-loader
+
 其主要的作用就是当我们在文件中引入`css` 文件中的时候
- - 内联的方式
- - cli的方式
- - 配置的方式
+
+- 内联的方式
+- cli 的方式
+- 配置的方式
+
 ```js
 // webpack.config.js
 module: {
@@ -236,10 +289,13 @@ module: {
       {
         test: /\.css$/i,
         use: [
+			{
+				loader:'style-loader'
+			},
           {
             loader: "css-loader",
             options: {
-        
+
             },
           },
         ],
@@ -247,3 +303,23 @@ module: {
     ],
   },
 ```
+
+### style-loader
+
+处理顺序为从后到前，即先交给 css-loader 处理，再把结果交给 style-loader。
+
+```js
+// webpack.config.js
+use: [
+  {
+    loader: "style-loader",
+  },
+  // 处理顺序为从后到前，即先交给 css-loader 处理，
+  // 再把结果交给style-loader。
+  {
+    loader: "css-loader",
+    options: {},
+  },
+];
+```
+### sass-loader
