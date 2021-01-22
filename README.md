@@ -190,7 +190,7 @@ webpack 5.14.0 compiled with 1 warning in 209 ms
 
 ---
 
-## Demo 02 : webpack.config.js & handle css module
+## Demo 02 : webpack.config.js & handle css module ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo02)) [:top:](#table-of-contents)
 
 默认是`index.js` 指定入口, `api/cli` 通过命令行的方式
 
@@ -241,20 +241,19 @@ this file. See https://webpack.js.org/concepts#loaders
 我们需要`css-loader` 的能力来处理 css 文件。这样可以正常引入`css`文件 **但是并没有应用到页面文档中** 还需要`style-loader` 样式才会生效
 
 ```shell
-yarn add css-loader style-loader -D 
+yarn add css-loader style-loader -D
 ```
 
 通常情况下我们是使用`预处理器` 譬如`sass(scss)` ,预处理文件
 
 ```scss
-div{
-	span{
-
-	}
+div {
+  span {
+  }
 }
 ```
 
-处理这种文件需要对应的编译 
+处理这种文件需要对应的编译
 
 ```sh
 yarn add sass -D
@@ -265,12 +264,29 @@ yarn add sass-loader -D
 ```shell
 ERROR in ./src/styles/index.scss 1:3
 Module parse failed: Unexpected token (1:3)
-You may need an appropriate loader to handle this file type, currently no loaders are configured to process 
+You may need an appropriate loader to handle this file type, currently no loaders are configured to process
 this file. See https://webpack.js.org/concepts#loaders> div{
 |     span{
 |
  @ ./src/main.js 2:0-28
 ```
+
+
+## Demo 03 : postCSS &  ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo03)) [:top:](#table-of-contents)
+
+问：什么是`postcss` 
+答：通过`js` 代码对样式进行转换、适配
+作用：自动添加浏览器的前缀、css样式的重置
+1. 构建工具中的扩展
+2. 添加相关的插件
+```sh
+yarn add postcss postcss-cli autoprefixer -D
+```
+
+```sh
+npx postcss --use autoprefixer -o result.css ./src/styles/index.css
+```
+
 
 ## Loaders
 
@@ -285,23 +301,23 @@ this file. See https://webpack.js.org/concepts#loaders> div{
 ```js
 // webpack.config.js
 module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: [
-			{
-				loader:'style-loader'
-			},
-          {
-            loader: "css-loader",
-            options: {
+  rules: [
+    {
+      test: /\.css$/i,
+      use: [
+    {
+      loader:'style-loader'
+    },
+        {
+          loader: "css-loader",
+          options: {
 
-            },
           },
-        ],
-      },
-    ],
-  },
+        },
+      ],
+    },
+  ],
+},
 ```
 
 ### style-loader
@@ -322,4 +338,56 @@ use: [
   },
 ];
 ```
+
 ### sass-loader
+
+```js
+
+// webpack.config.js
+{
+    // 命中css预处理文件 .sass .scss
+    test: /\.s[ac]ss$/i,
+    use:[
+      {
+        loader:'style-loader'
+      },
+      {
+        loader:'css-loader'
+      },
+      {
+        loader:'sass-loader'
+      }
+    ]
+  },
+```
+
+### postcss-loader
+
+>Options for PostCSS as we reference these options twice
+>Adds vendor prefixing based on your specified browser support in >package.json
+
+```js
+
+{
+  loader: "postcss-loader",
+  options: {
+      postcssOptions:{
+        plugins:[
+          require('autoprefixer')
+        ]
+      }
+  },
+},
+```
+
+## Other
+
+- 浏览器市场占有率 [can i use](https://www.caniuse.com/usage-table)
+
+```js
+// .browserslistrc
+> 1%
+last 2 versions
+```
+
+- 浏览器样式前缀 [autoprefixer](https://autoprefixer.github.io/)
