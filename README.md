@@ -272,7 +272,7 @@ this file. See https://webpack.js.org/concepts#loaders> div{
 ```
 
 
-## Demo 03 : postCSS &  ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo03)) [:top:](#table-of-contents)
+## Demo 03 : postCSS &  autoprefixer  ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo03)) [:top:](#table-of-contents)
 
 问：什么是`postcss` 
 答：通过`js` 代码对样式进行转换、适配
@@ -287,7 +287,68 @@ yarn add postcss postcss-cli autoprefixer -D
 npx postcss --use autoprefixer -o result.css ./src/styles/index.css
 ```
 
+通常在工程化的项目中，比如
 
+```css
+:root {
+  --mainColor: #12345678;
+}
+```
+把一些特定的样式描述转换为rgba,并且还会添加样式的前缀
+```css
+/* becomes */
+
+:root {
+  --mainColor: rgba(18, 52, 86, 0.47059);
+}
+```
+
+可以直接项目的根目录下`touch postcss.config.js` 
+
+```js
+module.exports ={
+    plugins:[
+        require('postcss-preset-env')
+    ]
+}
+```
+
+## Demo 04 : assets  ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo04)) [:top:](#table-of-contents)
+
+加载依赖的图片,**ERROR**
+
+```sh
+ERROR in ./src/assets/images/test.png 1:0
+Module parse failed: Unexpected character '�' (1:0)
+You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders
+(Source code omitted for this binary file)
+ @ ./src/index.js 6:10-45
+```
+没有对应的文件处理`loader`
+
+```js
+const div= document.createElement('div')
+const img = new Image()
+
+img.src = require('./assets/images/test.png')
+
+div.appendChild(img)
+```
+
+```js
+GET http://127.0.0.1:5500/demo04/[object%20Module] 404 (Not Found)
+```
+把相关的资源文件复制到`dist` 目录下，然后进行重命名
+
+
+```js
+
+{
+  // 对非文本文件采用 file-loader 加载
+  test: /\.(gif|png|jpe?g|eot|woff|ttf|svg|pdf)$/,
+  use: ["file-loader"],
+},
+```
 ## Loaders
 
 ### css-loader
@@ -380,6 +441,33 @@ use: [
 },
 ```
 
+### file-loader
+处理`requie` 引入的图片
+>"file" loader makes sure those assets get served by WebpackDevServer.
+>When you `import` an asset, you get its (virtual) filename.
+>In production, they would get copied to the `build` folder.
+>This loader doesn't use a "test" so it will catch all modules
+>that fall through the other loaders.
+```js
+// 
+module: {
+    rules: [
+        {
+            test:/\.(png|jpe?g|gif|svg)$/,
+            loader:'file-loader'
+        }
+    ]
+},
+```
+### url-loader
+
+```js
+// "url" loader works like "file" loader except that it embeds assets
+// smaller than specified limit in bytes as data URLs to avoid requests.
+// A missing `test` is equivalent to a match.
+```
+直接转换为`base64` 嵌入到打包后的`js`文件。
+
 ## Other
 
 - 浏览器市场占有率 [can i use](https://www.caniuse.com/usage-table)
@@ -391,3 +479,5 @@ last 2 versions
 ```
 
 - 浏览器样式前缀 [autoprefixer](https://autoprefixer.github.io/)
+
+- 转化现代的css特性 [postcss-preset-env](https://github.com/csstools/postcss-preset-env) 
