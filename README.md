@@ -349,6 +349,41 @@ GET http://127.0.0.1:5500/demo04/[object%20Module] 404 (Not Found)
   use: ["file-loader"],
 },
 ```
+
+## Demo 05 : assets module type  ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo05)) [:top:](#table-of-contents)
+资源模块类型子在`webpack5` 中新增了一种方式，我们不用使用之前的loader 直接配置`type` 类型（资源的类型）
+
+```js
+{
+    test:/\.(png|jpe?g|gif|svg)$/,
+    type:'asset/resource',
+    
+    // loader:'file-loader'
+    // use:[
+    //     {
+    //         loader:'file-loader',
+    //         options:{
+    //             name: 'img/[name].[hash:8].[ext]',
+    //         }
+    //     }
+        
+    // ]
+}
+```
+对于`字体元素` file-loader 可以加载
+
+```js
+{
+  // 对非文本文件采用 file-loader 加载
+  test: /\.(gif|png|jpe?g|eot|woff|ttf|svg|pdf)$/,
+  use: ["file-loader"],
+},
+```
+
+## Demo 06 : about plugins  ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo06)) [:top:](#table-of-contents)
+
+通过插件生成`index.html` 文件
+
 ## Loaders
 
 ### css-loader
@@ -468,6 +503,22 @@ module: {
 ```
 直接转换为`base64` 嵌入到打包后的`js`文件。
 
+ - 小的图片可以直接转换为`base64`
+
+## Plugins
+
+## clean-webpack-plugin
+
+```js
+  plugins: [new CleanWebpackPlugin()],
+
+```
+## html-webpack-plugin
+```js
+ // Generates an `index.html` file with the <script> injected.
+```
+## DefinePlugin
+创建全局的常量 内置的插件
 ## Other
 
 - 浏览器市场占有率 [can i use](https://www.caniuse.com/usage-table)
