@@ -172,7 +172,7 @@ webpack 5.14.0 compiled with 1 warning in 209 ms
     return r[s](o, o.exports, e), o.exports;
   }
   (() => {
-    "use strict";
+    'use strict';
     const { add: r } = e(35);
     r(1, 2);
   })();
@@ -204,10 +204,10 @@ npx webpack --entry ./src/main.js --output-path ./build
 
 ```js
 module.exports = {
-  entry: "./src/main.js",
+  entry: './src/main.js',
   output: {
-    filename: "出口的文件名.js",
-    path: "", // 绝对路径
+    filename: '出口的文件名.js',
+    path: '', // 绝对路径
   },
 };
 ```
@@ -271,14 +271,15 @@ this file. See https://webpack.js.org/concepts#loaders> div{
  @ ./src/main.js 2:0-28
 ```
 
+## Demo 03 : postCSS & autoprefixer ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo03)) [:top:](#table-of-contents)
 
-## Demo 03 : postCSS &  autoprefixer  ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo03)) [:top:](#table-of-contents)
-
-问：什么是`postcss` 
+问：什么是`postcss`
 答：通过`js` 代码对样式进行转换、适配
-作用：自动添加浏览器的前缀、css样式的重置
+作用：自动添加浏览器的前缀、css 样式的重置
+
 1. 构建工具中的扩展
 2. 添加相关的插件
+
 ```sh
 yarn add postcss postcss-cli autoprefixer -D
 ```
@@ -294,7 +295,9 @@ npx postcss --use autoprefixer -o result.css ./src/styles/index.css
   --mainColor: #12345678;
 }
 ```
-把一些特定的样式描述转换为rgba,并且还会添加样式的前缀
+
+把一些特定的样式描述转换为 rgba,并且还会添加样式的前缀
+
 ```css
 /* becomes */
 
@@ -303,17 +306,15 @@ npx postcss --use autoprefixer -o result.css ./src/styles/index.css
 }
 ```
 
-可以直接项目的根目录下`touch postcss.config.js` 
+可以直接项目的根目录下`touch postcss.config.js`
 
 ```js
-module.exports ={
-    plugins:[
-        require('postcss-preset-env')
-    ]
-}
+module.exports = {
+  plugins: [require('postcss-preset-env')],
+};
 ```
 
-## Demo 04 : assets  ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo04)) [:top:](#table-of-contents)
+## Demo 04 : assets ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo04)) [:top:](#table-of-contents)
 
 加载依赖的图片,**ERROR**
 
@@ -324,22 +325,23 @@ You may need an appropriate loader to handle this file type, currently no loader
 (Source code omitted for this binary file)
  @ ./src/index.js 6:10-45
 ```
+
 没有对应的文件处理`loader`
 
 ```js
-const div= document.createElement('div')
-const img = new Image()
+const div = document.createElement('div');
+const img = new Image();
 
-img.src = require('./assets/images/test.png')
+img.src = require('./assets/images/test.png');
 
-div.appendChild(img)
+div.appendChild(img);
 ```
 
 ```js
 GET http://127.0.0.1:5500/demo04/[object%20Module] 404 (Not Found)
 ```
-把相关的资源文件复制到`dist` 目录下，然后进行重命名
 
+把相关的资源文件复制到`dist` 目录下，然后进行重命名
 
 ```js
 
@@ -350,14 +352,15 @@ GET http://127.0.0.1:5500/demo04/[object%20Module] 404 (Not Found)
 },
 ```
 
-## Demo 05 : assets module type  ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo05)) [:top:](#table-of-contents)
-资源模块类型子在`webpack5` 中新增了一种方式，我们不用使用之前的loader 直接配置`type` 类型（资源的类型）
+## Demo 05 : assets module type ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo05)) [:top:](#table-of-contents)
+
+资源模块类型子在`webpack5` 中新增了一种方式，我们不用使用之前的 loader 直接配置`type` 类型（资源的类型）
 
 ```js
 {
     test:/\.(png|jpe?g|gif|svg)$/,
     type:'asset/resource',
-    
+
     // loader:'file-loader'
     // use:[
     //     {
@@ -366,10 +369,11 @@ GET http://127.0.0.1:5500/demo04/[object%20Module] 404 (Not Found)
     //             name: 'img/[name].[hash:8].[ext]',
     //         }
     //     }
-        
+
     // ]
 }
 ```
+
 对于`字体元素` file-loader 可以加载
 
 ```js
@@ -380,9 +384,67 @@ GET http://127.0.0.1:5500/demo04/[object%20Module] 404 (Not Found)
 },
 ```
 
-## Demo 06 : about plugins  ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo06)) [:top:](#table-of-contents)
+## Demo 06 : about plugins ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo06)) [:top:](#table-of-contents)
 
 通过插件生成`index.html` 文件
+
+## Demo 07 : Modular principle & mode ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo07)) [:top:](#table-of-contents)
+
+允许使用各种模块化（esModule commonjs）
+
+- commonjs 模块化的原理
+- esm 的原理
+- commonjs 加载 esm
+- esm 加载 commonjs
+
+### commonjs 的原理
+
+```js
+// dist/bundle.js
+(() => {
+  var __webpack_modules__ = {
+    './src/js/commonjs.js': (module) => {
+      function print() {
+        console.log(`commonjs`);
+      }
+      // 将导出的变量放入到module对象exports
+      module.exports = {
+        print,
+      };
+    },
+  };
+  // The module cache
+  var __webpack_module_cache__ = {};
+
+  // The require function
+  function __webpack_require__(moduleId) {
+    // 判断缓存中是否加载过对应moduleId的模块
+    if (__webpack_module_cache__[moduleId]) {
+      return __webpack_module_cache__[moduleId].exports;
+    }
+    // 创建一个module对象，并把它放入缓存中
+    var module = (__webpack_module_cache__[moduleId] = {
+      // no module.id needed
+      // no module.loaded needed
+      exports: {},
+    });
+
+    // 加载对应的模块
+    // 参数一
+    __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+
+    // 导出一个对象 {}
+    return module.exports;
+  }
+
+  (() => {
+    /*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+    __webpack_require__(/*! ./js/commonjs */ './src/js/commonjs.js');
+  })();
+})();
+```
 
 ## Loaders
 
@@ -424,12 +486,12 @@ module: {
 // webpack.config.js
 use: [
   {
-    loader: "style-loader",
+    loader: 'style-loader',
   },
   // 处理顺序为从后到前，即先交给 css-loader 处理，
   // 再把结果交给style-loader。
   {
-    loader: "css-loader",
+    loader: 'css-loader',
     options: {},
   },
 ];
@@ -459,8 +521,8 @@ use: [
 
 ### postcss-loader
 
->Options for PostCSS as we reference these options twice
->Adds vendor prefixing based on your specified browser support in >package.json
+> Options for PostCSS as we reference these options twice
+> Adds vendor prefixing based on your specified browser support in >package.json
 
 ```js
 
@@ -477,14 +539,17 @@ use: [
 ```
 
 ### file-loader
+
 处理`requie` 引入的图片
->"file" loader makes sure those assets get served by WebpackDevServer.
->When you `import` an asset, you get its (virtual) filename.
->In production, they would get copied to the `build` folder.
->This loader doesn't use a "test" so it will catch all modules
->that fall through the other loaders.
+
+> "file" loader makes sure those assets get served by WebpackDevServer.
+> When you `import` an asset, you get its (virtual) filename.
+> In production, they would get copied to the `build` folder.
+> This loader doesn't use a "test" so it will catch all modules
+> that fall through the other loaders.
+
 ```js
-// 
+//
 module: {
     rules: [
         {
@@ -494,6 +559,7 @@ module: {
     ]
 },
 ```
+
 ### url-loader
 
 ```js
@@ -501,9 +567,10 @@ module: {
 // smaller than specified limit in bytes as data URLs to avoid requests.
 // A missing `test` is equivalent to a match.
 ```
+
 直接转换为`base64` 嵌入到打包后的`js`文件。
 
- - 小的图片可以直接转换为`base64`
+- 小的图片可以直接转换为`base64`
 
 ## Plugins
 
@@ -513,12 +580,17 @@ module: {
   plugins: [new CleanWebpackPlugin()],
 
 ```
+
 ## html-webpack-plugin
+
 ```js
- // Generates an `index.html` file with the <script> injected.
+// Generates an `index.html` file with the <script> injected.
 ```
+
 ## DefinePlugin
+
 创建全局的常量 内置的插件
+
 ## Other
 
 - 浏览器市场占有率 [can i use](https://www.caniuse.com/usage-table)
@@ -531,4 +603,4 @@ last 2 versions
 
 - 浏览器样式前缀 [autoprefixer](https://autoprefixer.github.io/)
 
-- 转化现代的css特性 [postcss-preset-env](https://github.com/csstools/postcss-preset-env) 
+- 转化现代的 css 特性 [postcss-preset-env](https://github.com/csstools/postcss-preset-env)
