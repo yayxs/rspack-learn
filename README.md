@@ -550,6 +550,44 @@ GET http://127.0.0.1:5500/demo04/[object%20Module] 404 (Not Found)
 //# sourceMappingURL=bundle.js.map
 ```
 
+我们仍然可以交替加载
+
+```js
+// index.js
+const commonjs = require("./js/commonjs");
+
+import esm from "./js/esm";
+```
+
+## Demo 08 : source-map & Devtool([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo08)) [:top:](#table-of-contents)
+
+当 webpack 打包源代码时，可能会很难追踪到 error(错误) 和 warning(警告) 在源代码中的原始位置。
+
+- [https://webpack.docschina.org/configuration/devtool/#devtool](https://webpack.docschina.org/configuration/devtool/#devtool)
+
+不同的值，打包的速度不尽相同
+
+```json
+{
+  "version": 3, // 版本
+  "sources": ["webpack://demo08/./src/index.js"], // 来自哪里
+  "names": [], // 转换之前的变量集合、属性名称
+  "mappings": ";;;;AAAA,c", // source-map
+  "file": "bundle.js", // 打包之后的文件
+  "sourcesContent": ["console.log(a)"], // 源代码
+  "sourceRoot": "" // 相对的目录
+}
+```
+
+- false 不生成 source-map 文件
+- eval 转成字符串 方便在开发环境下调试错误的代码等等 (函数中)
+- none 生产环境下默认值 (none)（省略 devtool 选项） - 不生成 source map。
+- inline-source-map
+
+```js
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9kZW1vMDgvLi9zcmMvaW5kZXguanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztBQUFBLGMiLCJmaWxlIjoiYnVuZGxlLmpzIiwic291cmNlc0NvbnRlbnQiOlsiY29uc29sZS5sb2coYSkiXSwic291cmNlUm9vdCI6IiJ9
+```
+
 ## Loaders
 
 ### css-loader
