@@ -172,7 +172,7 @@ webpack 5.14.0 compiled with 1 warning in 209 ms
     return r[s](o, o.exports, e), o.exports;
   }
   (() => {
-    'use strict';
+    "use strict";
     const { add: r } = e(35);
     r(1, 2);
   })();
@@ -204,10 +204,10 @@ npx webpack --entry ./src/main.js --output-path ./build
 
 ```js
 module.exports = {
-  entry: './src/main.js',
+  entry: "./src/main.js",
   output: {
-    filename: '出口的文件名.js',
-    path: '', // 绝对路径
+    filename: "出口的文件名.js",
+    path: "", // 绝对路径
   },
 };
 ```
@@ -310,7 +310,7 @@ npx postcss --use autoprefixer -o result.css ./src/styles/index.css
 
 ```js
 module.exports = {
-  plugins: [require('postcss-preset-env')],
+  plugins: [require("postcss-preset-env")],
 };
 ```
 
@@ -329,10 +329,10 @@ You may need an appropriate loader to handle this file type, currently no loader
 没有对应的文件处理`loader`
 
 ```js
-const div = document.createElement('div');
+const div = document.createElement("div");
 const img = new Image();
 
-img.src = require('./assets/images/test.png');
+img.src = require("./assets/images/test.png");
 
 div.appendChild(img);
 ```
@@ -403,7 +403,7 @@ GET http://127.0.0.1:5500/demo04/[object%20Module] 404 (Not Found)
 // dist/bundle.js
 (() => {
   var __webpack_modules__ = {
-    './src/js/commonjs.js': (module) => {
+    "./src/js/commonjs.js": (module) => {
       function print() {
         console.log(`commonjs`);
       }
@@ -441,9 +441,113 @@ GET http://127.0.0.1:5500/demo04/[object%20Module] 404 (Not Found)
     /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-    __webpack_require__(/*! ./js/commonjs */ './src/js/commonjs.js');
+    __webpack_require__(/*! ./js/commonjs */ "./src/js/commonjs.js");
   })();
 })();
+```
+
+### ems 模块化原理
+
+```js
+(() => {
+  // 启动脚本
+  var __webpack_modules__ = {
+    "./src/index.js": (
+      __unused_webpack_module,
+      __webpack_exports__,
+      __webpack_require__
+    ) => {
+      "use strict";
+      __webpack_require__.r(__webpack_exports__);
+      var _js_esm_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
+        /*! ./js/esm.js */ "./src/js/esm.js"
+      );
+      /* harmony import */ var _js_esm_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/ __webpack_require__.n(
+        _js_esm_js__WEBPACK_IMPORTED_MODULE_0__
+      );
+      // require('./js/commonjs')
+    },
+
+    "./src/js/esm.js": () => {
+      const print = () => {
+        console.log(`esm`);
+      };
+    },
+  };
+  // 模块缓存处理
+  var __webpack_module_cache__ = {};
+
+  //  __webpack_require__ webpack 加载函数
+  function __webpack_require__(moduleId) {
+    // 检查模块是否缓存
+    if (__webpack_module_cache__[moduleId]) {
+      return __webpack_module_cache__[moduleId].exports;
+    }
+    // Create a new module (and put it into the cache)
+    var module = (__webpack_module_cache__[moduleId] = {
+      // no module.id needed
+      // no module.loaded needed
+      exports: {},
+    });
+
+    // Execute the module function
+    __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+
+    // Return the exports of the module
+    return module.exports;
+  }
+
+  (() => {
+    // getDefaultExport function for compatibility with non-harmony modules
+    __webpack_require__.n = (module) => {
+      var getter =
+        module && module.__esModule ? () => module["default"] : () => module;
+      __webpack_require__.d(getter, { a: getter });
+      return getter;
+    };
+  })();
+
+  /* webpack/runtime/define property getters */
+  (() => {
+    // define getter functions for harmony exports
+    __webpack_require__.d = (exports, definition) => {
+      for (var key in definition) {
+        if (
+          __webpack_require__.o(definition, key) &&
+          !__webpack_require__.o(exports, key)
+        ) {
+          Object.defineProperty(exports, key, {
+            enumerable: true,
+            get: definition[key],
+          });
+        }
+      }
+    };
+  })();
+
+  /* webpack/runtime/hasOwnProperty shorthand */
+  (() => {
+    __webpack_require__.o = (obj, prop) =>
+      Object.prototype.hasOwnProperty.call(obj, prop);
+  })();
+
+  /* webpack/runtime/make namespace object */
+  (() => {
+    // define __esModule on exports
+    __webpack_require__.r = (exports) => {
+      if (typeof Symbol !== "undefined" && Symbol.toStringTag) {
+        Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+      }
+      Object.defineProperty(exports, "__esModule", { value: true });
+    };
+  })();
+
+  // startup
+  // Load entry module
+  __webpack_require__("./src/index.js");
+  // This entry module used 'exports' so it can't be inlined
+})();
+//# sourceMappingURL=bundle.js.map
 ```
 
 ## Loaders
@@ -486,12 +590,12 @@ module: {
 // webpack.config.js
 use: [
   {
-    loader: 'style-loader',
+    loader: "style-loader",
   },
   // 处理顺序为从后到前，即先交给 css-loader 处理，
   // 再把结果交给style-loader。
   {
-    loader: 'css-loader',
+    loader: "css-loader",
     options: {},
   },
 ];
