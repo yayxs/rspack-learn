@@ -1,3 +1,5 @@
+import "core-js/stable";
+import "regenerator-runtime/runtime";
 console.log(`babel`);
 
 const foo = ()=>{
@@ -6,3 +8,5 @@ const foo = ()=>{
 [1, 2, 3].map(function(n) {
     return n + 1;
   });
+
+const p = new Promise()

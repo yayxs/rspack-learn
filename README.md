@@ -612,6 +612,15 @@ Babel 是 JavaScript 编译器
 npx babel index.js -o compiled.js --presets=@babel/env
 ```
 
+### 插件和预设
+
+- `@babel/plugin-transform-arrow-functions` 将所有的箭头函数转换为 ES5 函数表达式
+
+- `@babel/preset-env` 此预设将包括所有插件以支持现代 JavaScript（ES2015，ES2016 等）。但是预设也可以选择。而不是从终端传递 cli 和预设选项
+  一般情况下 我们是设置单独的配置文件，目前是采用多包管理
+
+### polyfill
+
 ## Loaders
 
 ### css-loader
@@ -737,6 +746,29 @@ module: {
 直接转换为`base64` 嵌入到打包后的`js`文件。
 
 - 小的图片可以直接转换为`base64`
+
+## babel-loader
+
+```js
+rules: [{
+  //
+  test:/\.js$/,
+  use:{
+      loader:'babel-loader',
+      options:{
+          presets:[
+              "@babel/preset-env"
+          ]
+      }
+  }
+}],
+```
+
+> Stage 0 - Strawman: just an idea, possible Babel plugin.
+> Stage 1 - Proposal: this is worth working on.
+> Stage 2 - Draft: initial spec.
+> Stage 3 - Candidate: complete spec and initial browser >implementations.
+> Stage 4 - Finished: will be added to the next yearly release.
 
 ## Plugins
 
