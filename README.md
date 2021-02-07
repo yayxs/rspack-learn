@@ -588,6 +588,30 @@ import esm from "./js/esm";
 //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9kZW1vMDgvLi9zcmMvaW5kZXguanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztBQUFBLGMiLCJmaWxlIjoiYnVuZGxlLmpzIiwic291cmNlc0NvbnRlbnQiOlsiY29uc29sZS5sb2coYSkiXSwic291cmNlUm9vdCI6IiJ9
 ```
 
+在开发阶段推荐使用`cheap-module-source-map` 测试环境也可以使用 `sorce-map` 或者是`cheap-module-source-map`
+
+在发布阶段的话可以不写
+
+## Demo 09 : babel ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo09)) [:top:](#table-of-contents)
+
+Babel 是 JavaScript 编译器
+
+```sh
+  npm install --save-dev @babel/cli @babel/core @babel/preset-env
+```
+
+其中
+
+- @babel/core babel @babel/cli 是 Babel 命令行转码工具，如果我们使用命令行进行 Babel 转码就需要安装它
+- @babel/cli 脚手架方便 我们使用在终端使用命令 @babel/cli 依赖@babel/core，因此也需要安装@babel/core 这个 Babel 核心 npm 包
+- @babel/preset-env 预设 集合了转换箭头函、es6 语法等等@babel/preset-env 这个 npm 包提供了 ES6 转换 ES5 的语法转换规则，我们在 Babel 配置文件里指定使用它。如果不使用的话，也可以完成转码，但转码后的代码仍然是 ES6 的，相当于没有转码
+
+使用预设进行**编译**
+
+```shell
+npx babel index.js -o compiled.js --presets=@babel/env
+```
+
 ## Loaders
 
 ### css-loader
