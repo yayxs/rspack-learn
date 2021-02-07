@@ -621,6 +621,22 @@ npx babel index.js -o compiled.js --presets=@babel/env
 
 ### polyfill
 
+```js
+   {
+        "targets": {
+
+        },
+        /**
+         * false 不用任何相关的代码
+         *
+         * usage 代码中用到什么引入什么
+         * entry 入口文件导入
+         */
+        "useBuiltIns": "usage",
+        "corejs": "3.6.5"
+      }
+```
+
 ## Loaders
 
 ### css-loader
