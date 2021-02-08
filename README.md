@@ -651,6 +651,10 @@ ERROR in ./src/index.ts
 
 ts 的项目需要新建`tsconfig.json` `tsc --init`
 
+## Demo 12 : eslint ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo12)) [:top:](#table-of-contents)
+
+生成一个文件（es 的配置文件）
+
 ## Loaders
 
 ### css-loader
@@ -837,6 +841,8 @@ rules: [{
       },
     ],
 ```
+
+## eslint-loader
 
 ## Plugins
 
