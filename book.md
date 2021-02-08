@@ -4,28 +4,23 @@
 
 ## Table of Contents
 
-1. [《深入浅出 Webpack》入门基本配置](./webpack_one.md)
-2. [《深入浅出 Webpack》实战](./webpack_two.md)
-3. [《深入浅出 Webpack》单页应用自动生成 html 文件](./webpack_three.md)
+1. [《深入浅出 Webpack》入门基本配置]()
+2. [《深入浅出 Webpack》实战]()
+3. [《深入浅出 Webpack》单页应用自动生成 html 文件]()
 
-## one
+> 《深入浅出 Webpack》入门基本配置
 
 ---
 
-## title: 《深入浅出 Webpack》入门基本配置
-
-::: tip
-
 ```bash
-npm i -D webpack
-npm i -D style-loader css-loader
-npm i -D extract-text-webpack-plugin
-npm i -D mini-css-extract-plugin
+npm i -D webpack webpack-cli // webpack
+npm i -D style-loader css-loader // loader
+npm i -D extract-text-webpack-plugin // plugin
+npm i -D mini-css-extract-plugin // plugin
 npm i -D webpack-dev-server
+// balbel的配置
 npm install -D babel-loader @babel/core @babel/preset-env webpack
 ```
-
-:::
 
 ## 背景
 
@@ -44,21 +39,17 @@ npm install -D babel-loader @babel/core @babel/preset-env webpack
 - string 的形式
 
   > 单入口
-  >
   > 打包形成一个 chunk,输出一个 bundle 文件
 
 - array 的形式（特殊情况）
 
   > 多入口
-  >
   > 多有的文件最终会形成一个 chunk,输出一个 bundle 文件
-  >
   > html 的热更新
 
 - object 的形式
 
   > 多入口
-  >
   > 有几个入口就几个 chunk 几个 bundle
 
 ### output
@@ -214,19 +205,12 @@ resolve: {
 ### devServer
 
 - contentBase
-
 - watchContentBase:true 监视目录下的文件
-
 - compress
-
 - port
-
 - host
-
 - open:true 自动打开浏览器
-
 - proxy:{}
-
   ```js
    proxy:{
        '/api':{
@@ -237,8 +221,7 @@ resolve: {
        }
    }
   ```
-
-> webpack-dev-server 编译后不写入任何输出文件。相反，它将捆绑文件保留在内存中，并像在服务器根路径上挂载的真实文件一样提供它们。如果您的页面希望在其他路径上找到捆绑文件，则可以使用[`publicPath`](https://webpack.js.org/configuration/dev-server/#devserverpublicpath-)开发服务器的配置中的选项进行更改。
+  > webpack-dev-server 编译后不写入任何输出文件。相反，它将捆绑文件保留在内存中，并像在服务器根路径上挂载的真实文件一样提供它们。如果您的页面希望在其他路径上找到捆绑文件，则可以使用[`publicPath`](https://webpack.js.org/configuration/dev-server/#devserverpublicpath-)开发服务器的配置中的选项进行更改。
 
 以上的完整配置放出
 
@@ -331,13 +314,9 @@ module.exports = {
       },
 ```
 
-## two
+## 《深入浅出 Webpack》实战
 
----
-
-## title: 《深入浅出 Webpack》实战
-
-```
+```sh
 npm i babel-preset-es2015 -D
 npm install -D babel-loader @babel/core @babel/preset-env
 npm install -D @babel/plugin-transform-runtime
@@ -403,34 +382,35 @@ npm install sass-loader sass  --save-dev
       },
 ```
 
-## 使用`ts`
+## typescript 项目配置
 
-```
+```json
+// tsconfig.json
 {
-    "compilerOptions": {
-      "outDir": "./dist/",
-      "noImplicitAny": true,
-      "module": "es6", // 编译出的代码采用的模块规范
-      "target": "es5", // 编译出的代码采用 ES 的哪个版本
-      "jsx": "react",
-      "allowJs": true
-    }
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "module": "es6", // 编译出的代码采用的模块规范
+    "target": "es5", // 编译出的代码采用 ES 的哪个版本
+    "jsx": "react",
+    "allowJs": true
   }
+}
 ```
 
-```
- {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
+```js
+{
+  test: /\.tsx?$/,
+  use: 'ts-loader',
+  exclude: /node_modules/,
+},
 ```
 
 上述的操作我们都是需要新建一个 `.html` 文件来加载 打包后的 js 文件，但通常情况下我们的 html 文件是没有这么简单的，而是有一些其他的配置，接着往下看吧
 
 ---
 
-## title: 《深入浅出 Webpack》单页应用自动生成 html 文件
+> **《深入浅出 Webpack》单页应用自动生成 html 文件**
 
 我们从头搭建一个 `React + Typescript + Webpack` 的环境
 

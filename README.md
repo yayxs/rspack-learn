@@ -206,7 +206,9 @@ npx webpack --entry ./src/main.js --output-path ./build
 module.exports = {
   entry: "./src/main.js",
   output: {
+    // 把所有依赖的模块合并输出到一个 bundle.js 文件
     filename: "出口的文件名.js",
+    // 输出文件都放到 dist 目录下(输出文件存放的本地目录必须是决定路径string类型)
     path: "", // 绝对路径
   },
 };
@@ -637,6 +639,18 @@ npx babel index.js -o compiled.js --presets=@babel/env
       }
 ```
 
+## Demo 11 : typescript ([Source-code](https://github.com/yayxs/webpack-learn/tree/main/demo11)) [:top:](#table-of-contents)
+
+**error**
+
+```sh
+ERROR in ./src/index.ts
+[tsl] ERROR
+      TS18002: The 'files' list in config file 'tsconfig.json' is empty.
+```
+
+ts 的项目需要新建`tsconfig.json` `tsc --init`
+
 ## Loaders
 
 ### css-loader
@@ -766,6 +780,33 @@ module: {
 ## babel-loader
 
 ```js
+{
+        // 命中 JavaScript 文件
+        // test: /\.js$/,
+        test: /\.m?js$/,
+        // 用 babel-loader 转换 JavaScript 文件
+        // ?cacheDirectory 表示传给 babel-loader 的参数，用于缓存 babel 编译结果加快重新编译速度
+        // use: ["babel-loader?cacheDirectory"],
+        exclude: /(node_modules|bower_components)/,
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              cacheDirectory: true, // 默认是false
+              presets: ["@babel/preset-env"],
+              plugins: ['@babel/plugin-transform-runtime']
+            },
+            // // enforce:'post' 的含义是把该 Loader 的执行顺序放到最后
+            // // enforce 的值还可以是 pre，代表把 Loader 的执行顺序放到最前面
+            // enforce: "post",
+          },
+        ],
+        // 只命中src目录里的js文件，加快 Webpack 搜索速度
+        include: path.resolve(__dirname, "src"),
+      },
+```
+
+```js
 rules: [{
   //
   test:/\.js$/,
@@ -785,6 +826,17 @@ rules: [{
 > Stage 2 - Draft: initial spec.
 > Stage 3 - Candidate: complete spec and initial browser >implementations.
 > Stage 4 - Finished: will be added to the next yearly release.
+
+## ts-loader
+
+```js
+  rules: [
+      {
+        test: /\.tsx?$/,
+        loader: "ts-loader",
+      },
+    ],
+```
 
 ## Plugins
 
@@ -818,3 +870,12 @@ last 2 versions
 - 浏览器样式前缀 [autoprefixer](https://autoprefixer.github.io/)
 
 - 转化现代的 css 特性 [postcss-preset-env](https://github.com/csstools/postcss-preset-env)
+
+## typescript 配置
+
+可以通过`ts-loader` 与 `babel-loader` 都可以编译 `ts`代码
+
+[Babel vs tscfor TypeScript](https://www.typescriptlang.org/docs/handbook/babel-with-typescript.html#babel-vs-tsc-for-typescript)
+
+- ts-loader 会有相关的类型校验
+- babel-loader 不会

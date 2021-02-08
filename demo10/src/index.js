@@ -1,8 +1,5 @@
-import React ,{Component}from 'react'
+import React, { Component } from "react";
 
-
-
-const App = ()=>{
-    return <>123</>
-}
-
+const App = () => {
+  return <>123</>;
+};
