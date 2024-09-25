@@ -1,0 +1,6 @@
+packages:
+  - 'packages/*'
+  - 'examples/*'
+  - 'playground/**'
+  - docs
+  - mindmap
